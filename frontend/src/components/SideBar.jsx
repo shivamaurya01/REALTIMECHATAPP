@@ -285,19 +285,24 @@ function SideBar() {
   )}
 
 </div>
-  <div className="flex-1 overflow-y-auto px-4 py-5 space-y-3 min-h-0">
+<div className="flex-1 overflow-y-auto px-4 py-5 space-y-3 min-h-0">
   <h2 className="text-gray-700 text-sm font-semibold uppercase tracking-wider px-2">
-    Conversations
+    {search && input.trim() ? "Search Results" : "Conversations"}
   </h2>
 
-  {otherUsers?.map((user) => {
+  {(search && input.trim() ? searchData : otherUsers)?.map((user) => {
     const isSelected = selectedUser?._id === user._id;
     const isOnline = onlineUsers?.includes(user._id);
 
     return (
       <div
         key={user._id}
-        onClick={() => dispatch(setSelectedUser(user))}
+        onClick={() => {
+          dispatch(setSelectedUser(user));
+          setSearch(false);
+          setInput("");
+          dispatch(setSearchData([]));
+        }}
         className={`flex items-center gap-4 p-3 rounded-2xl cursor-pointer transition-all duration-200 ${
           isSelected
             ? "bg-sky-500 text-white shadow-md"
@@ -340,6 +345,12 @@ function SideBar() {
       </div>
     );
   })}
+
+  {search && input.trim() && searchData.length === 0 && (
+    <div className="text-center text-gray-500 py-6">
+      No user found
+    </div>
+  )}
 </div>
 
 {/* Bottom Logout */}
