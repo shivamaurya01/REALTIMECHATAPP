@@ -31,8 +31,8 @@ export const signUp = async (req, res) => {
     res.cookie("token", token, {
       httpOnly: true,
       maxAge: 7 * 24 * 60 * 60 * 1000,
-      sameSite: "Strict",
-      secure: false,
+      sameSite: "None",
+      secure: true,
     });
 
     return res.status(201).json(user);
@@ -56,24 +56,15 @@ export const login = async (req, res) => {
       return res.status(400).json({ message: "incorrect password" });
     }
 
-    // const token = await genToken(user._id);
-    // console.log("Generated Token:", token);
-    // res.cookie("token", token, {
-    //   httpOnly: true,
-    //   maxAge: 7 * 24 * 60 * 60 * 1000,
-    //   sameSite: "lax",
-    //   secure: false,
-    // });
-    // console.log("Cookie has been set");
-    // return res.status(201).json(user);
+    
     const token = await genToken(user._id);
 
-    // console.log("Generated Token:", token);
+   
 
     res.cookie("token", token, {
       httpOnly: true,
-      secure: false,
-      sameSite: "lax",
+      secure: true,
+      sameSite: "None",
       path:"/",
       maxAge: 7 * 24 * 60 * 60 * 1000,
     });
